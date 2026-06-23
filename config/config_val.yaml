@@ -1,0 +1,40 @@
+Global:
+  distributed: False
+  seed: 2026
+  device: cpu
+
+Dataset:
+  input_shape: [112, 112, 3] # 送入backbone的图像尺寸
+  num_workers: 4 # 多线程读取数据
+  
+  # lfw check
+  lfw_eval_flag: False # 是否开启LFW评估
+  lfw_dir_path: test_dataset/lfw_funneled # LFW评估数据集的文件路径和对应的txt文件
+  lfw_pairs_path: test_dataset/lfw_pair_test.txt
+  lfw_shuffle: False
+  lfw_batch_size: 16
+
+  # dataset check
+  dataset_val_flag: True # 与lfw互斥
+  dataset_dir_path: test_dataset/公司人脸图像_align # LFW评估数据集的文件路径和对应的txt文件
+  dataset_pairs_path: test_dataset/face_pairs.txt
+  dataset_shuffle: False
+  dataset_batch_size: 16
+
+Arch:
+  pretrained: r18_l1_checkpoint_31.pt  # model_data/arcface_mobilefacenet.pth
+  resume: True  # must be trained 
+  backbone: mbf
+
+  # loss
+  loss: False
+  # fc
+  margin_list: [ 1.0, 0.5, 0.0 ]
+  interclass_filtering_threshold: 0
+  embedding_size: 128
+  sample_rate: 1.0
+  fp16: False # 是否使用混合精度训练
+    
+
+
+

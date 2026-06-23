@@ -1,0 +1,20 @@
+Global:
+  device: cpu
+
+
+Arch:
+  pretrained: r18_l1_checkpoint_31.pt  # model_data/arcface_mobilefacenet.pth
+  backbone: mbf
+
+  # loss
+  loss: False
+  # fc
+  margin_list: [ 1.0, 0.5, 0.0 ]
+  interclass_filtering_threshold: 0
+  embedding_size: 128
+  sample_rate: 1.0
+  fp16: False # 是否使用混合精度训练
+    
+
+
+

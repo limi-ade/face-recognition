@@ -1,0 +1,120 @@
+Global:
+  distributed: False
+  seed: 2026
+  sync_bn: False # 不支持
+  device: cpu
+  roc_path: roc.jpg
+  loss_path: loss.jpg
+  acc_path: acc.jpg
+  annotation_path: cls_datasets/train.lst # 数据集中有多少人ID
+  fine_tune: True # 使用不同学习率 unfreeze_layers[0] 基础学习率X倍 
+  unfreeze_layers: ['adapter', 'conv2', 'linear7', 'linear1'] # 解冻层
+  distill_flag: True # 蒸馏
+  semisiamese_distill_flag: True # 半孪生 开启后 cls + distill + semi
+  cls_flag: True # 分类
+  eval_flag: True # 是否开启三种评估 
+  cls_weight: 0.2  # 分类损失权重
+  distill_weight: 0.2  # 蒸馏损失权重
+  triplet_weight: 0.2  # 三元损失权重
+  semi_weight: 0.2  # 半孪生损失权重
+  
+
+
+Dataset:
+  input_shape: [112, 112, 3] # 送入backbone的图像尺寸
+  dali: True # 启用dail False必须提供root_dir 表示图像文件夹 
+  num_workers: 4 # 多线程读取数据
+  
+
+
+  # 训练集
+  train_rec: cls_datasets/train.rec
+  train_idx: cls_datasets/train.idx
+  train_dali_aug: True # 启用dail数据增强
+  train_batch_size: 32
+  train_device: cpu  # cpu/mixed
+  # 测试集
+  val_rec: cls_datasets/train.rec
+  val_idx: cls_datasets/train.idx
+  val_dali_aug: False # 启用dail数据增强
+  val_batch_size: 32
+  val_device: cpu
+
+  # 特征蒸馏
+  distill_annotation_path: distill_dataset_75_25/distill_train.txt # 蒸馏数据集对应的txt文件
+  distill_shuffle: True
+  distill_batch_size: 32
+
+  # 半孪生训练数据集
+  semisiame_train_imgs_ori: distill_dataset_75_25/train # 半孪生train数据集地址
+  semisiame_train_imgs_en: distill_dataset_75_25/train_light # 半孪生train数据集地址
+  semisiame_train_annotation: distill_dataset_75_25/ss_train.txt # 半孪生train数据集标注
+  semisiame_train_batch_size: 32
+  semisiame_train_shuffle: True
+
+  # 蒸馏测试数据集
+  semisiame_val_path: distill_dataset_75_25/val # 交叉验证
+  semisiame_val_pairs_path: distill_dataset_75_25/val_pair.txt
+  semisiame_val_shuffle: True
+  semisiame_val_batch_size: 32
+
+  # lfw check
+  
+  lfw_eval_period: 2  # 间隔
+  lfw_dir_path: test_dataset/lfw_funneled # LFW评估数据集的文件路径和对应的txt文件
+  lfw_pairs_path: test_dataset/lfw_pair_test.txt
+  lfw_shuffle: True
+  lfw_batch_size: 32
+
+  # 普通人脸测试数据集
+  face_val_path: test_dataset/公司人脸图像_align # LFW评估数据集的文件路径和对应的txt文件
+  face_val_pairs_path: test_dataset/face_pairs.txt
+  face_val_shuffle: True
+  face_val_batch_size: 32
+
+  # 增强人脸测试数据集
+  enface_val_path: test_dataset/公司人脸图像_align_light # LFW评估数据集的文件路径和对应的txt文件
+  enface_val_pairs_path: test_dataset/enface_pairs.txt
+  enface_val_shuffle: True
+  enface_val_batch_size: 32
+
+
+Train_param:
+  init_Epoch: 0
+  epoch: 10
+  init_lr: 5e-3
+  lr_rate: 2  # 不同学习率
+  optimizer_type: sgd # adam、sgd
+  momentum: 0.9
+  weight_decay: 5e-4 # adam会导致weight_decay错误，使用adam时建议设置为0
+  lr_decay_type: cos # step、cos
+  save_period: 2 # 多少个epoch保存一次权重
+  save_dir: logs # 权值与日志文件保存的文件夹
+  # lr 调度
+  warmup_iters_ratio: 0.1 # warmup占总epoch比例
+  warmup_lr_ratio: 0.1  # warmup lr_ratio
+  no_aug_iter_ratio: 0.1 # 整个周期内维持最小学习率的epoch比例
+  step_num: 10 # step lr下降epoch
+  cycles: 1 # 学习率重启次数 注意总轮数要能被整除
+  restart_lr_ratio: 0.4 # 重启时lr变为最大值多大
+
+Arch:
+  pretrained: mobilefacenet_128_from_pp.pt  # model_data/arcface_mobilefacenet.pth
+  resume: False  # must be trained 
+  backbone_s: mbf
+
+  # loss
+  loss: False  # 使用arcface中定义的loss
+  # fc
+  margin_list: [ 1.0, 0.5, 0.0 ]
+  interclass_filtering_threshold: 0
+  embedding_size: 128 # mbf
+  sample_rate: 1.0
+  fp16: False # 是否使用混合精度训练
+
+  distill_model: backbone.pth  # 教师模型
+  backbone_t: r18
+    
+
+
+
