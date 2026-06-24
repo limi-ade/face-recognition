@@ -70,11 +70,39 @@ The complete model includes a student model and a teacher model. Twin models com
 
 ## Training Entrance
 
-*train_v2.py*
+*train_v2.py*  
+
+```python
+train('config/config_train.yaml')
+```
 
 ## eval
 
-train_v2.py change config
+*train_v2.py* 
+
+```python
+train('config/config_val.yaml')
+```
+
+## Model Zoo
+
+- All models can be found in here.  
+
+- [Baidu Yun Pan](https://pan.baidu.com/s/1CL-l4zWqsI1oDuEEYVhj-g): e8pw  
+
+- [OneDrive](https://1drv.ms/u/s!AswpsDO2toNKq0lWY69vN58GR6mw?e=p9Ov5d)
+
+-  https://pan.baidu.com/s/1ElJlfmMwOGX699MsgLY8qA   z3rq 
+
+  
+
+## dataset
+
+CASIA-WebFaces and LFW
+
+ https://pan.baidu.com/s/1qMxFR8H_ih0xmY-rKgRejw  bcrq   
+
+## dataset
 
 ## Other
 

@@ -2,7 +2,7 @@ Global:
   distributed: False
   seed: 2026
   sync_bn: False # 不支持
-  device: cpu
+  device: cuda:0
   roc_path: roc.jpg
   loss_path: loss.jpg
   acc_path: acc.jpg
@@ -32,13 +32,13 @@ Dataset:
   train_idx: cls_datasets/train.idx
   train_dali_aug: True # 启用dail数据增强
   train_batch_size: 32
-  train_device: cpu  # cpu/mixed
+  train_device: mixed  # cpu/mixed
   # 测试集
   val_rec: cls_datasets/train.rec
   val_idx: cls_datasets/train.idx
   val_dali_aug: False # 启用dail数据增强
   val_batch_size: 32
-  val_device: cpu
+  val_device: mixed
 
   # 特征蒸馏
   distill_annotation_path: distill_dataset_75_25/distill_train.txt # 蒸馏数据集对应的txt文件
@@ -99,16 +99,16 @@ Train_param:
   restart_lr_ratio: 0.4 # 重启时lr变为最大值多大
 
 Arch:
-  pretrained: mobilefacenet_128_from_pp.pt  # model_data/arcface_mobilefacenet.pth
+  pretrained:  backbone.pth  # model_data/arcface_mobilefacenet.pth
   resume: False  # must be trained 
-  backbone_s: mbf
+  backbone_s: r18
 
   # loss
   loss: False  # 使用arcface中定义的loss
   # fc
   margin_list: [ 1.0, 0.5, 0.0 ]
   interclass_filtering_threshold: 0
-  embedding_size: 128 # mbf
+  embedding_size: 512 # except mbf
   sample_rate: 1.0
   fp16: False # 是否使用混合精度训练
 
