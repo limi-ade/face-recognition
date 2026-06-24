@@ -94,15 +94,11 @@ train('config/config_val.yaml')
 
 -  https://pan.baidu.com/s/1ElJlfmMwOGX699MsgLY8qA   z3rq 
 
-  
-
 ## dataset
 
 CASIA-WebFaces and LFW
 
  https://pan.baidu.com/s/1qMxFR8H_ih0xmY-rKgRejw  bcrq   
-
-## dataset
 
 ## Other
 
